@@ -2,9 +2,118 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Globe, FileText, X } from "lucide-react";
+import {
+  ExternalLink,
+  Globe,
+  FileText,
+  X,
+  Users,
+  User,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import Image from "next/image";
 import { works, type Work } from "@/data/portfolio";
+
+function TypeBadge({ type }: { type: Work["type"] }) {
+  const isTeam = type === "team";
+  return (
+    <span
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${
+        isTeam
+          ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/20"
+          : "bg-violet-500/10 text-violet-400 border-violet-500/20"
+      }`}
+    >
+      {isTeam ? <Users size={11} /> : <User size={11} />}
+      {isTeam ? "チーム開発" : "個人開発"}
+    </span>
+  );
+}
+
+function ImageCarousel({ images, alt }: { images: string[]; alt: string }) {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const prev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDirection(-1);
+    setCurrent((c) => (c - 1 + images.length) % images.length);
+  };
+  const next = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDirection(1);
+    setCurrent((c) => (c + 1) % images.length);
+  };
+  const goTo = (i: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDirection(i > current ? 1 : -1);
+    setCurrent(i);
+  };
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir > 0 ? "100%" : "-100%" }),
+    center: { x: 0 },
+    exit: (dir: number) => ({ x: dir > 0 ? "-100%" : "100%" }),
+  };
+
+  return (
+    <div className="relative aspect-video bg-zinc-800 overflow-hidden group/carousel">
+      <AnimatePresence mode="sync" initial={false} custom={direction}>
+        <motion.div
+          key={current}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={images[current]}
+            alt={`${alt} ${current + 1}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 672px"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={prev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-1.5 rounded-full bg-black/50 hover:bg-black/70 transition-colors opacity-0 group-hover/carousel:opacity-100"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-1.5 rounded-full bg-black/50 hover:bg-black/70 transition-colors opacity-0 group-hover/carousel:opacity-100"
+          >
+            <ChevronRight size={18} />
+          </button>
+
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => goTo(i, e)}
+                style={{ boxShadow: "0 0 0 1.5px rgba(0,0,0,0.5)" }}
+                className={`rounded-full transition-all duration-200 ${
+                  i === current
+                    ? "w-4 h-2 bg-white"
+                    : "w-2 h-2 bg-white/50 hover:bg-white/80"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 function WorkCard({ work, onClick }: { work: Work; onClick: () => void }) {
   return (
@@ -27,15 +136,20 @@ function WorkCard({ work, onClick }: { work: Work; onClick: () => void }) {
         />
       </div>
       <div className="p-4">
-        <h3 className="font-semibold text-lg group-hover:text-violet-400 transition-colors">
-          {work.title}
-        </h3>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="font-semibold text-lg group-hover:text-violet-400 transition-colors leading-tight">
+            {work.title}
+          </h3>
+          <TypeBadge type={work.type} />
+        </div>
       </div>
     </motion.div>
   );
 }
 
 function WorkModal({ work, onClose }: { work: Work; onClose: () => void }) {
+  const modalImages = work.images && work.images.length > 0 ? work.images : [work.image];
+
   return (
     <>
       <motion.div
@@ -64,25 +178,18 @@ function WorkModal({ work, onClose }: { work: Work; onClose: () => void }) {
             <X size={18} />
           </button>
 
-          <div className="relative aspect-video bg-zinc-800">
-            <Image
-              src={work.image}
-              alt={work.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 672px"
-            />
-          </div>
+          <ImageCarousel images={modalImages} alt={work.title} />
 
           <div className="p-6 md:p-8">
-            <motion.h3
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-2xl font-bold mb-4"
+              className="flex items-center gap-3 flex-wrap mb-4"
             >
-              {work.title}
-            </motion.h3>
+              <h3 className="text-2xl font-bold">{work.title}</h3>
+              <TypeBadge type={work.type} />
+            </motion.div>
 
             <motion.p
               initial={{ opacity: 0, y: 10 }}
