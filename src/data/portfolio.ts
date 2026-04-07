@@ -51,8 +51,10 @@ export const infoCards: InfoCard[] = [
 export interface Work {
   id: string;
   title: string;
+  type: "team" | "solo";
   description: string;
   image: string;
+  images?: string[];
   techs: string[];
   liveUrl?: string;
   githubUrl?: string;
@@ -65,6 +67,7 @@ export const works: Work[] = [
   {
     id: "1",
     title: "Fitness App",
+    type: "team",
     description:
       "スクール内でより実務に近い開発を行うために企画した,"+"\n"+
       "フィットネスジム向けの顧客管理アプリです。"+"\n"+
@@ -80,6 +83,7 @@ export const works: Work[] = [
   {
     id: "2",
     title: "Reel Shop",
+    type: "team",
     description:
       "Z世代向けリール型フリマサイト。共同開発。\n" +
       "「探す」より「出会う」をコンセプトに、\n" +
@@ -94,11 +98,17 @@ export const works: Work[] = [
   {
     id: "3",
     title: "DocuLens",
+    type: "solo",
     description:
       "Google Gemini APIを使ってドキュメントを要約・質問応答できるWebアプリケーション。\n" +
       "PDF・テキスト・URL・YouTube動画を入力として受け付け、\n" +
       "Geminiによる要約生成とFAQチャットを提供する。",
     image: "/works/Docu.png",
+    // スクショを追加したら "/works/Docu2.png" のように増やすだけ
+    images: ["/works/Docu.png",
+      "/works/Docu.png",
+      
+    ],
     techs: ["Next.js", "Tailwind CSS v4", "Google Gemini 2.5 Flash", "TypeScript", "React 19", "pdf-parse" ,"cheerio", "youtube-transcript", "Framer Motion"],
     liveUrl: "https://example.com",
     githubUrl: "https://github.com/Pealsh/DocuLens.git",
@@ -106,15 +116,16 @@ export const works: Work[] = [
   {
     id: "4",
     title: "twitter N ",
+    type: "solo",
     description:
       "専門学校1年生の時に作成したSNSアプリ。\n" +
       "アカウントの新規作成・プロフィール編集、画像付き投稿が可能。\n" +
       "いいね・返信に加え、「続きをお願い」でスレッドを伸ばして会話を続けられる。\n" +
       "通知機能でいいねや返信を把握できるタイムライン型の体験を目指した。",
     image: "/works/twitterN.png",
-    techs: ["Next.js", "D3.js", "WebSocket", "Redis"],
+    techs: ["Python", "Django", "SQLite", "HTML", "CSS", "JavaScript", "Pillow", "django-widget-tweaks"],
     liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/Pealsh/twitter-N",
   },
 ];
 
@@ -190,20 +201,14 @@ export interface CareerItem {
 
 export const careerItems: CareerItem[] = [
   {
-    year: "2020",
-    title: "○○大学 入学",
-    description: "情報工学を専攻。アルゴリズムとデータ構造を学ぶ。",
-  },
-  {
-    year: "2022",
+    year: "2021",
     title: "プログラミング学習開始",
     description: "独学でWeb開発を学び始める。HTML/CSS/JSからスタート。",
   },
   {
     year: "2023",
-    title: "インターン @ ○○株式会社",
-    description:
-      "Reactを使ったフロントエンド開発を経験。チーム開発の基礎を学ぶ。",
+    title: "ドワンゴ情報工科学校 入学",
+    description: "ITエンジニア育成に特化した専門校へ入学。Web開発を本格的に学び始める。",
   },
   {
     year: "2024",
@@ -253,11 +258,4 @@ export const contactLinks: ContactLink[] = [
     label: "X (Twitter)",
     href: "https://x.com",
     color: "hover:text-sky-400 hover:border-sky-500/30",
-  },
-  {
-    icon: FileText,
-    label: "Zenn",
-    href: "https://zenn.dev",
-    color: "hover:text-blue-400 hover:border-blue-500/30",
-  },
-];
+  },]
