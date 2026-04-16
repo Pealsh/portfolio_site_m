@@ -17,7 +17,7 @@ export const profile = {
   name: "Maoto Mikami",
   title: "Full-Stack Developer",
   tagline: "Webで価値を創る。デザインからバックエンドまで。",
-  photo: "/profile.jpg",
+  photo: "/MAO.png",
   about: {
     heading: "ものづくりが好きな",
     headingAccent: "フルスタックエンジニア",
@@ -112,6 +112,27 @@ export const works: Work[] = [
     techs: ["Next.js", "Tailwind CSS v4", "Google Gemini 2.5 Flash", "TypeScript", "React 19", "pdf-parse" ,"cheerio", "youtube-transcript", "Framer Motion"],
     liveUrl: "https://example.com",
     githubUrl: "https://github.com/Pealsh/DocuLens.git",
+  },
+  {
+    id: "5",
+    title: "Blog Site",
+    type: "solo",
+    description:
+      "Markdownエディタを使ってブログ記事を作成・公開できるWebアプリ。\n" +
+      "シンタックスハイライト・画像挿入・URLリンクなど多彩な書式に対応。\n" +
+      "記事はリアルタイムプレビューで確認しながら執筆でき、\n" +
+      "Firebaseをバックエンドに使用しデータを永続化。\n" +
+      "検索・ダークモード・SEO対応・モバイルレスポンシブも実装。",
+    image: "/works/blog1.png",
+    images: [
+      "/works/blog1.png",
+      "/works/blog2.png",
+      "/works/blog3.png",
+      "/works/blog4.png",
+      "/works/blog5.png",
+    ],
+    techs: ["React", "TypeScript", "Firebase", "Vite", "Tailwind CSS", "Zustand", "React Router", "Markdown"],
+    githubUrl: "https://github.com/Pealsh/Blog-main",
   },
   {
     id: "4",
